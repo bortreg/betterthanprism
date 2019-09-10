@@ -16,7 +16,6 @@ cd4pd1Dpos <- tfh[tfh$population == "Cells/Singlets/Live/Tcells/CD4+,CD8-/PD-1lo
 wk2 <- cd4pd1X5[cd4pd1X5$study.wk == -2, ]
 
 #plot data for each population at a given timepoint
-p <- ggplot(wk2, aes(x = vaccine.route, y = statistic)) +
-  geom_boxplot(fill = "white") + geom_jitter(width = 0.15) +
-  theme_light()
-p
+p <- ggplot(cd4pd1Dpos, aes(group = study.wk, x = study.wk, y = statistic)) +
+  geom_boxplot(width = 1.8, fill = "white") + theme_light()
+p + geom_jitter(width = 0.08, aes(color = macaque.ID, shape = vaccine.route))
