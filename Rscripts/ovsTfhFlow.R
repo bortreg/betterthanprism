@@ -3,7 +3,7 @@ library(ggplot2)
 library(dplyr)
 
 #Open Data from Exported from FlowJo and format for analysis
-tfh <- read.csv("~/Desktop/20190905_TfhPanel_comb_v01.csv")
+tfh <- read.csv("~/Desktop/20190917_TfhPanel_comb_v02.csv")
 tfh$macaque.ID <- as.factor(tfh$macaque.ID)
 
 #This is a way to "find and replace" with dplyr! Better than xcel :-)
@@ -32,6 +32,21 @@ wkPl <- wkP + geom_vline(xintercept = 0, linetype="solid", color = "black", size
 #Add plot labels
 wkPlab <- wkPl + labs(title = "Circulating Tfh",subtitle = "PBMC", color = "macaque",
                    x = "Study Week", y = "%CXCR3+ CXCR5+ of PD-1low CD4 T cells")
-  
+wkPlab  
+
+#Asign variables for column statistics for timepoints
+col1 <- cd4pd1Dpos[cd4pd1Dpos$study.wk == -2, ]
+col2 <- cd4pd1Dpos[cd4pd1Dpos$study.wk == 2, ]
+
+#Check normality of data (data is normal if p > 0.05)
+shapiro.test(col1$statistic)
+qqnorm(col1$statistic,main = "Column 1", pch=19)
+qqline(col1$statistic)
+
+shapiro.test(col2$statistic)
+qqnorm(col2$statistic,main = "Column 2", pch=19)
+qqline(col2$statistic)
+
+
 
 
