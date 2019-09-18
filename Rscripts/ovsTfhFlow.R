@@ -34,19 +34,43 @@ wkPlab <- wkPl + labs(title = "Circulating Tfh",subtitle = "PBMC", color = "maca
                    x = "Study Week", y = "%CXCR3+ CXCR5+ of PD-1low CD4 T cells")
 wkPlab  
 
+#Sort data by macaque ID for paired comparisons
+cd4pd1Dpos <- cd4pd1Dpos[order(cd4pd1Dpos$macaque.ID), ]
+
 #Asign variables for column statistics for timepoints
 col1 <- cd4pd1Dpos[cd4pd1Dpos$study.wk == -2, ]
+col1oral <- col1[col1$vaccine.route == "Oral", ]
+col1im <- col1[col1$vaccine.route == "IM", ]
 col2 <- cd4pd1Dpos[cd4pd1Dpos$study.wk == 2, ]
+col2oral <- col2[col2$vaccine.route == "Oral", ]
+col2im <- col2[col2$vaccine.route == "IM", ]
+
+
 
 #Check normality of data (data is normal if p > 0.05)
 shapiro.test(col1$statistic)
 qqnorm(col1$statistic,main = "Column 1", pch=19)
 qqline(col1$statistic)
+shapiro.test(col1oral$statistic)
+qqnorm(col1oral$statistic,main = "Column 1", pch=19)
+qqline(col1oral$statistic)
+shapiro.test(col1im$statistic)
+qqnorm(col1im$statistic,main = "Column 1", pch=19)
+qqline(col1im$statistic)
 
 shapiro.test(col2$statistic)
 qqnorm(col2$statistic,main = "Column 2", pch=19)
 qqline(col2$statistic)
+shapiro.test(col2oral$statistic)
+qqnorm(col2oral$statistic,main = "Column 1", pch=19)
+qqline(col2oral$statistic)
+shapiro.test(col2im$statistic)
+qqnorm(col2im$statistic,main = "Column 1", pch=19)
+qqline(col2im$statistic)
 
-
+#ttest of data
+t.test(col1$statistic, col2$statistic, paired = TRUE)
+t.test(col1im$statistic, col2im$statistic, paired = TRUE)
+t.test(col1oral$statistic, col2oral$statistic, paired = TRUE)
 
 
