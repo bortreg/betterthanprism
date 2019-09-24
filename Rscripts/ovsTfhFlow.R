@@ -17,9 +17,6 @@ cd4pd1X5 <- tfh[tfh$population == "Cells/Singlets/Live/Tcells/CD4+,CD8-/PD-1low/
 cd4pd1X3 <- tfh[tfh$population == "Cells/Singlets/Live/Tcells/CD4+,CD8-/PD-1low/CXCR3+,CXCR5-", ]
 cd4pd1Dpos <- tfh[tfh$population == "Cells/Singlets/Live/Tcells/CD4+,CD8-/PD-1low/CXCR3+,CXCR5+", ]
 
-#Index df with specific timepoint
-wk2 <- cd4pd1X5[cd4pd1X5$study.wk == -2, ]
-
 #plot data for each population at a given timepoint
 p <- ggplot(cd4pd1Dpos, aes(group = study.wk, x = study.wk, y = statistic)) +
   geom_boxplot(size = 0.3, width = 1.8, fill = "white") + theme_light()
@@ -35,13 +32,18 @@ wkPlab <- wkPl + labs(title = "Circulating Tfh",subtitle = "PBMC", color = "maca
 wkPlab  
 
 #Sort data by macaque ID for paired comparisons
+cd8Cxcr5 <- cd8Cxcr5[order(cd8Cxcr5$macaque.ID), ]
+cd4pd1Dneg <- cd4pd1Dneg[order(cd4pd1Dneg$macaque.ID), ]
+cd4pd1X5 <- cd4pd1X5[order(cd4pd1X5$macaque.ID), ]
+cd4pd1X3 <- cd4pd1X3[order(cd4pd1X3$macaque.ID), ]
 cd4pd1Dpos <- cd4pd1Dpos[order(cd4pd1Dpos$macaque.ID), ]
 
+
 #Asign variables for column statistics for timepoints
-col1 <- cd4pd1Dpos[cd4pd1Dpos$study.wk == -2, ]
+col1 <- cd4pd1X5[cd4pd1X5$study.wk == -2, ]
 col1oral <- col1[col1$vaccine.route == "Oral", ]
 col1im <- col1[col1$vaccine.route == "IM", ]
-col2 <- cd4pd1Dpos[cd4pd1Dpos$study.wk == 2, ]
+col2 <- cd4pd1X5[cd4pd1X5$study.wk == 2, ]
 col2oral <- col2[col2$vaccine.route == "Oral", ]
 col2im <- col2[col2$vaccine.route == "IM", ]
 
