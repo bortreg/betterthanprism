@@ -28,13 +28,18 @@ wkPl <- wkP + geom_vline(xintercept = 0, linetype="solid", color = "black", size
 
 #Add plot labels
 poIlab <- substring(as.character(poI[1,5]), 27, last = 100000L)
+poIlab <- gsub(pattern = "/", replacement = "_", poIlab)
+poIlabP <- paste("~/Desktop/graphBucket/", poIlab, ".pdf", sep = "") 
+poIlabP <- gsub(pattern = "-", replacement = "neg", poIlabP)
+poIlabP <- gsub(pattern = "+", replacement = "pos", poIlabP, fixed = TRUE)
+
 
 wkPlab <- wkPl + labs(title = poIlab, subtitle = "PBMC", color = "macaque",
-          x = "Weeks post-vaccine", y = "Frequency of parent") +
-pdf("Desktop/graphBucket/OVS2flowPlots/DC_CD83_PBMC.pdf") +
-lgLab +
-dev.off()
+          x = "Weeks post-vaccine", y = "Frequency of parent")
 
+pdf(file = poIlabP)
+wkPlab
+dev.off()
 
 
 
