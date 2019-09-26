@@ -4,7 +4,7 @@ library(dplyr)
 
 
 #Open Data from Exported from FlowJo
-rawInnFlow <- read.csv("~/Desktop/ovs2FlowData/OVS2_innateFlow_Combined.csv")
+rawInnFlow <- read.csv("~/Desktop/ovsFlowData/OVS2/OVS2_innateFlow_Combined.csv")
 
 #Reformat Factors and Levels for analysis
 rawInnFlow$macaque.ID <- as.factor(rawInnFlow$macaque.ID)
@@ -25,9 +25,12 @@ wkPl <- wkP + geom_vline(xintercept = 0, linetype="solid", color = "black", size
   geom_vline(xintercept=8, linetype="dashed", color = "black", size = 0.3)+
   geom_vline(xintercept=16, linetype="dashed", color = "black", size = 0.3)
 
+
 #Add plot labels
-lgLab <- lg + labs(title = "B cells",subtitle = "PBMC", color = "macaque",
-          x = "Days post-vaccine", y = "Frequency of mDC") +
+poIlab <- substring(as.character(poI[1,5]), 27, last = 100000L)
+
+wkPlab <- wkPl + labs(title = poIlab, subtitle = "PBMC", color = "macaque",
+          x = "Weeks post-vaccine", y = "Frequency of parent") +
 pdf("Desktop/graphBucket/OVS2flowPlots/DC_CD83_PBMC.pdf") +
 lgLab +
 dev.off()

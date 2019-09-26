@@ -25,7 +25,14 @@ wkPl <- wkP + geom_vline(xintercept = 0, linetype="solid", color = "black", size
   geom_vline(xintercept=8, linetype="dashed", color = "black", size = 0.3)+
   geom_vline(xintercept=16, linetype="dashed", color = "black", size = 0.3)
 
-#Save PDF of plot
+#plot 2 time points for a given population
+wkA <- cd4pd1Dpos[cd4pd1Dpos$study.wk == 8, ]
+wkB <- cd4pd1Dpos[cd4pd1Dpos$study.wk == 8.43, ] 
+p <- ggplot(wkA, aes(group = study.wk, x = study.wk, y = statistic)) +
+  geom_boxplot(size = 0.3, width = 1.8, fill = "white") + theme_light()
+wkP <- p + geom_jitter(width = 0.08, aes(shape = vaccine.route, color = macaque.ID))
+wkPl <- wkP + geom_vline(xintercept = 0, linetype="solid", color = "black", size=0.3)+ 
+
 #Add plot labels
 wkPlab <- wkPl + labs(title = "Circulating Tfh",subtitle = "PBMC", color = "macaque",
                    x = "Study Week", y = "%CXCR3+ CXCR5+ of PD-1low CD4 T cells")
