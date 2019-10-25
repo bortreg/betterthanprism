@@ -16,6 +16,7 @@ cd4pd1Dneg <- tfh[tfh$population == "Cells/Singlets/Live/Tcells/CD4+,CD8-/PD-1lo
 cd4pd1X5 <- tfh[tfh$population == "Cells/Singlets/Live/Tcells/CD4+,CD8-/PD-1low/CXCR3-,CXCR5+", ]
 cd4pd1X3 <- tfh[tfh$population == "Cells/Singlets/Live/Tcells/CD4+,CD8-/PD-1low/CXCR3+,CXCR5-", ]
 cd4pd1Dpos <- tfh[tfh$population == "Cells/Singlets/Live/Tcells/CD4+,CD8-/PD-1low/CXCR3+,CXCR5+", ]
+cd4pd1X5_I <- tfh[tfh$population == "Cells/Singlets/Live/Tcells/CD4+,CD8-/PD-1low/CXCR3+,CXCR5+", ]
 
 #plot data for each population at a given timepoint
 p <- ggplot(cd4pd1X5, aes(group = study.wk, x = study.wk, y = statistic)) +
@@ -28,8 +29,8 @@ wkPl <- wkP + geom_vline(xintercept = 0, linetype="solid", color = "black", size
 wkPl
 
 #plot 2 time points for a given population
-wkA <- cd4pd1Dpos[cd4pd1Dpos$study.wk == 8, ]
-wkB <- cd4pd1Dpos[cd4pd1Dpos$study.wk == 8.43, ] 
+wkA <- cd4pd1X5[cd4pd1X5$study.wk == 8, ]
+wkB <- cd4pd1X5[cd4pd1X5$study.wk == 8.43, ] 
 p <- ggplot(wkA, aes(group = study.wk, x = study.wk, y = statistic)) +
   geom_boxplot(size = 0.3, width = 1.8, fill = "white") + theme_light()
 wkP <- p + geom_jitter(width = 0.08, aes(shape = vaccine.route, color = macaque.ID))
@@ -49,10 +50,10 @@ cd4pd1Dpos <- cd4pd1Dpos[order(cd4pd1Dpos$macaque.ID), ]
 
 
 #Asign variables for column statistics for timepoints
-col1 <- cd4pd1X5[cd4pd1X5$study.wk == 8, ]
+col1 <- cd4pd1Dpos[cd4pd1Dpos$study.wk == 8, ]
 col1oral <- col1[col1$vaccine.route == "Oral", ]
 col1im <- col1[col1$vaccine.route == "IM", ]
-col2 <- cd4pd1X5[cd4pd1X5$study.wk == 8.43, ]
+col2 <- cd4pd1Dpos[cd4pd1Dpos$study.wk == 8.43, ]
 col2oral <- col2[col2$vaccine.route == "Oral", ]
 col2im <- col2[col2$vaccine.route == "IM", ]
 
@@ -80,8 +81,8 @@ qqnorm(col2im$statistic,main = "Column 1", pch=19)
 qqline(col2im$statistic)
 
 #ttest of data
-t.test(col1$statistic, col2$statistic, paired = TRUE)
-t.test(col1im$statistic, col2im$statistic, paired = TRUE)
-t.test(col1oral$statistic, col2oral$statistic, paired = TRUE)
+t.test(col1$statistic, col2$statistic, paired = FALSE)
+t.test(col1im$statistic, col2im$statistic, paired = FALSE)
+t.test(col1oral$statistic, col2oral$statistic, paired = FALSE)
 
 
