@@ -2,6 +2,7 @@
 library(dplyr)
 library(ggplot2)
 library(tibble)
+library(gplots)
 
 #Import Pathway Correlation Matrix
 HUpaths <- read.csv("~/Desktop/HUpath.csv")
@@ -18,6 +19,17 @@ HUcormat <- signif(cor(HUpathName),2)
 HEUcormat <- signif(cor(HEUpathName),2)
 
 #Plot Correlation Matrix
-col<- colorRampPalette(c("#4378EB", "#A09E9A", "#EEA826"))(20)
-heatmap(HUcormat, col=col, symm=TRUE)
-heatmap(HEUcormat, col=col, symm=TRUE)
+my_palette<- colorRampPalette(c("#4378EB", "#A09E9A", "#EEA826"))(20)
+heatmap(HUcormat, col=my_palette, symm=TRUE)
+heatmap(HEUcormat, col=my_palette, symm=TRUE)
+
+#Load Normalized mRNA data
+HUnorm <- read.csv("~/Desktop/HUnorm.csv")
+HUnormName <- HUnorm[,-1]
+rownames(HUnormName) <- HUnorm[,1]
+
+#Transform Data
+HUnormName <- log2(HUnormName)
+
+HUnormMat <- as.matrix(HUnormName)
+heatmap(HUnormMat, col=my_palette, scale = "none")
