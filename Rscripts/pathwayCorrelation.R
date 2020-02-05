@@ -27,9 +27,13 @@ heatmap(HEUcormat, col=my_palette, symm=TRUE)
 HUnorm <- read.csv("~/Desktop/HUnorm.csv")
 HUnormName <- HUnorm[,-1]
 rownames(HUnormName) <- HUnorm[,1]
+HUnorm <- HUnormName
 
 #Transform Data
-HUnormName <- log2(HUnormName)
+HUnorm <- log2(HUnorm)
+
+#Add Categories
+HUnorm <- add_column(HUnorm, condition = "BCG")
 
 HUnormMat <- as.matrix(HUnormName)
 heatmap(HUnormMat, col=my_palette, scale = "none")
