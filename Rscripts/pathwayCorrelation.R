@@ -25,12 +25,10 @@ heatmap(HEUcormat, col=my_palette, symm=TRUE)
 
 #Load Normalized mRNA data
 HUnorm <- read.csv("~/Desktop/HUnorm.csv")
-HUnormName <- HUnorm[,-1]
-rownames(HUnormName) <- HUnorm[,1]
-HUnorm <- HUnormName
+HUnorm <- as_tibble(HUnorm)
 
 #Transform Data
-HUnorm <- log2(HUnorm)
+HUnorm[,2:ncol(HUnorm)] <- log2(HUnorm[,2:ncol(HUnorm)])
 
 #Add Categories
 HUnorm <- add_column(HUnorm, condition = "BCG")
