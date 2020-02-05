@@ -28,10 +28,9 @@ HUnorm <- read.csv("~/Desktop/HUnorm.csv")
 HUnorm <- as_tibble(HUnorm)
 
 #Transform Data
-HUnorm[,2:ncol(HUnorm)] <- log2(HUnorm[,2:ncol(HUnorm)])
+HUnorm[,4:ncol(HUnorm)] <- log2(HUnorm[,4:ncol(HUnorm)])
 
-#Add Categories
-HUnorm <- add_column(HUnorm, condition = "BCG")
-
-HUnormMat <- as.matrix(HUnormName)
-heatmap(HUnormMat, col=my_palette, scale = "none")
+#Prepare data for heatmap
+rnames <- as.matrix(HUnorm[,1])
+mat_data <- data.matrix(HUnorm[,4:ncol(HUnorm)])
+rownames(mat_data) <- rnames
