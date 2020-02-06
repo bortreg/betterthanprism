@@ -40,13 +40,13 @@ mat_data <- zscore(mat_data)
 mat_data <- cbind(mat_data, HUnorm[,3])
 
 #Index Genes
-NFkBgenes <- c("TNF","IL1B","IL6","IL12A","IL12B","IL18","IL15","IFNG","IL4","IL10","IL1RAP","TGFB1","IL8","CCL2","CCL5","NFKB1","NFKB2","condition")
+NFkBgenes <- c("TNF","IL1B","IL6","IL12A","IL12B","IL18","IL15","IFNG","IL4","IL10","IL1RAP","TGFB1","IL8","CCL2","CCL5","NFKB1","NFKB2","IL23A","condition")
 HUnormNFKB <- mat_data[,NFkBgenes]
 HUnormNFKB$cc <- ifelse(HUnormNFKB$condition == "BCG", "#ECC03F", "#C6C4BF")
 
 #plot heatmap
 tiff("~/Desktop/test.tiff", units="in", width=5, height=5, res=300)
-heatmap <- heatmap.2(t(HUnormNFKB[,1:17]), 
+heatmap <- heatmap.2(t(HUnormNFKB[,1:18]), 
            col=my_palette, 
            Rowv = FALSE, 
            dendrogram = "col",
