@@ -44,8 +44,10 @@ NFkBgenes <- c("TNF","IL1B","IL6","IL12A","IL12B","IL18","IL15","IFNG","IL4","IL
 HUnormNFKB <- mat_data[,NFkBgenes]
 HUnormNFKB$cc <- ifelse(HUnormNFKB$condition == "BCG", "#ECC03F", "#C6C4BF")
 
+
+
 #plot heatmap
-tiff("~/Desktop/test.tiff", units="in", width=5, height=5, res=300)
+pdf("~/Desktop/test.tiff", width=7, height=7)
 heatmap <- heatmap.2(t(HUnormNFKB[,1:18]), 
            col=my_palette, 
            Rowv = FALSE, 
