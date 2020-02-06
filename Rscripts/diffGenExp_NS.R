@@ -1,7 +1,7 @@
 #Import Tables of Differentially Expressed Genes from nSolver
 #*Make sure to rename columns you wish to remain unique to a specific group
-HE_DE <- read.csv("Desktop/NS_analysisCBMC/HEunpair_DE.csv", sep = ",")
-HU_DE <- read.csv("Desktop/NS_analysisCBMC/HUunpair_DE.csv", sep = ",")
+HU_DE <- read.csv("~/Documents/R/Nanostring_DataFrames/DE_HU.csv")
+HEU_DE <- read.csv("~/Documents/R/Nanostring_DataFrames/DE_HEU.csv")
 
 #Merge dataframes
 DEcomb <- merge(HE_DE, HU_DE)
