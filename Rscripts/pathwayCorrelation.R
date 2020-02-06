@@ -19,7 +19,7 @@ HUcormat <- signif(cor(HUpathName),2)
 HEUcormat <- signif(cor(HEUpathName),2)
 
 #Plot Correlation Matrix
-my_palette<- colorRampPalette(c("#4378EB", "#A09E9A", "#EEA826"))(20)
+my_palette<- colorRampPalette(c("#FFFFFF", "#E89D11"))(n = 299)
 heatmap(HUcormat, col=my_palette, symm=TRUE)
 heatmap(HEUcormat, col=my_palette, symm=TRUE)
 
@@ -27,10 +27,29 @@ heatmap(HEUcormat, col=my_palette, symm=TRUE)
 HUnorm <- read.csv("~/Desktop/HUnorm.csv")
 HUnorm <- as_tibble(HUnorm)
 
-#Transform Data
-HUnorm[,4:ncol(HUnorm)] <- log2(HUnorm[,4:ncol(HUnorm)])
-
 #Prepare data for heatmap
+zscore <- function(x) {          #zscore function
+  z <- (mat_data - mean(x)) / sd(x)
+  return(z)
+}
 rnames <- as.matrix(HUnorm[,1])
 mat_data <- data.matrix(HUnorm[,4:ncol(HUnorm)])
 rownames(mat_data) <- rnames
+mat_data <- log2(mat_data)
+mat_data <- zscore(mat_data)
+mat_data <- cbind(mat_data, HUnorm[,3])
+
+#Index Genes
+NFkBgenes <- c("TNF.mRNA","IL1B.mRNA","IL6.mRNA","IL12A.mRNA","IL12B.mRNA","IL18.mRNA","IL15.mRNA","IFNG.mRNA","IL4.mRNA","IL10.mRNA","IL1RAP.mRNA","TGFB1.mRNA","IL8.mRNA","CCL2.mRNA","CCL5.mRNA")
+HUnormNFKB <- mat_data[,NFkBgenes]
+
+#plot heatmap
+heatmap.2(t(HUnormNFKB), 
+          col=my_palette, 
+          Rowv = FALSE, 
+          dendrogram = "col",
+          trace = "none",
+          ColSideColors = c(
+            rep("")
+          
+
