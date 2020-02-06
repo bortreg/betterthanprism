@@ -19,7 +19,7 @@ HUcormat <- signif(cor(HUpathName),2)
 HEUcormat <- signif(cor(HEUpathName),2)
 
 #Plot Correlation Matrix
-my_palette<- colorRampPalette(c("#FFFFFF", "#E89D11"))(n = 299)
+my_palette<- colorRampPalette(c("#FFFFFF", "#45A242"))(n = 299)
 heatmap(HUcormat, col=my_palette, symm=TRUE)
 heatmap(HEUcormat, col=my_palette, symm=TRUE)
 
@@ -40,16 +40,30 @@ mat_data <- zscore(mat_data)
 mat_data <- cbind(mat_data, HUnorm[,3])
 
 #Index Genes
-NFkBgenes <- c("TNF.mRNA","IL1B.mRNA","IL6.mRNA","IL12A.mRNA","IL12B.mRNA","IL18.mRNA","IL15.mRNA","IFNG.mRNA","IL4.mRNA","IL10.mRNA","IL1RAP.mRNA","TGFB1.mRNA","IL8.mRNA","CCL2.mRNA","CCL5.mRNA")
+NFkBgenes <- c("TNF","IL1B","IL6","IL12A","IL12B","IL18","IL15","IFNG","IL4","IL10","IL1RAP","TGFB1","IL8","CCL2","CCL5","condition")
 HUnormNFKB <- mat_data[,NFkBgenes]
+HUnormNFKB$cc <- ifelse(HUnormNFKB$condition == "BCG", "#ECC03F", "#C6C4BF")
 
 #plot heatmap
-heatmap.2(t(HUnormNFKB), 
-          col=my_palette, 
-          Rowv = FALSE, 
-          dendrogram = "col",
-          trace = "none",
-          ColSideColors = c(
-            rep("")
-          
+tiff("~/Desktop/test.tiff", units="in", width=5, height=5, res=300)
+heatmap <- heatmap.2(t(HUnormNFKB[,1:15]), 
+           col=my_palette, 
+           Rowv = FALSE, 
+           dendrogram = "col",
+           trace = "none",
+           labCol = FALSE,
+           margins = c(5,12),
+           offsetRow = 0.01,
+           ColSideColors = HUnormNFKB$cc)
+
+par(lend = 1)
+legend("topright",
+       legend = c("BCG", "untreated"),
+       cex = 0.7,
+       pt.cex = 1,
+       col = c("#ECC03F", "#C6C4BF"),
+       lty = 1,
+       lwd = 10
+)          
+dev.off()
 
