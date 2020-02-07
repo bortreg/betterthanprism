@@ -34,12 +34,22 @@ ggplot(df, aes(x=Log2.fold.change, y=-log2(P.value), color = FDR)) +
 dev.off()
 
 #Merge dataframes
-names(HU_DE[,2:ncol(HU_DE)]) <- paste0("HU.", names(HU_DE[,2:ncol(HU_DE)]))
-names(HEU_DE[,2:ncol(HEU_DE)]) <- paste0("HEU.", names(HEU_DE[,2:ncol(HEU_DE)]))
+names(HU_DE) <- paste0("HU.", names(HU_DE))
+names(HU_DE) <- gsub("HU.Gene","Gene",names(HU_DE))
+names(HEU_DE) <- paste0("HEU.", names(HEU_DE))
+names(HEU_DE) <- gsub("HEU.Gene","Gene",names(HEU_DE))
 
 DEcomb <- merge(HU_DE, HEU_DE)
+DEcomb <- DEcomb[order(DEcomb$HU.Log2.fold.change, decreasing = TRUE), ]
+DEtop100 <- DEcomb[1:100, c("HU.Log2.fold.change","HEU.Log2.fold.change")] 
+row.names(DEtop100) <- DEcomb[1:100,"Gene"]
+DEtop100 <- t(DEtop100)  
 
-#Heatmap of DE
+#Heatmap of DEtop100
+zscore <- function(x) {          #zscore function
+  z <- (mat_data - mean(x)) / sd(x)
+  return(z)
+}
 
 
 
