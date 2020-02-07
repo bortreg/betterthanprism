@@ -1,10 +1,29 @@
+#Load Packages
+library(dplyr)
+library(ggplot2)
+library(ggrepel)
+library(scales)
+library(calibrate)
+library(RColorBrewer)
+
 #Import Tables of Differentially Expressed Genes from nSolver
 #*Make sure to rename columns you wish to remain unique to a specific group
 HU_DE <- read.csv("~/Documents/R/Nanostring_DataFrames/DE_HU.csv")
 HEU_DE <- read.csv("~/Documents/R/Nanostring_DataFrames/DE_HEU.csv")
 
+#make basic volcano plots with ggplot2
+vDE <- HU_DE[,c("Log2.fold.change","P.value","significant")]
+vDElab <- HU_DE[,"significant"]
+vDEcol <- HU_DE[,"greenpoints"]
+
+ggplot(HU_DE, aes(x=Log2.fold.change, y=-log2(P.value), color = FDR)) +
+  geom_point() +
+  scale_color_manual(values = c("#45A242","#5CA25A","#89BE88","#C6E0C5","#CECFCE"))
+
+
+
 #Merge dataframes
-DEcomb <- merge(HE_DE, HU_DE)
+DEcomb <- merge(HU_DE, HEU_DE)
 
 #Calculate z scores from ratios of fold change from experimental group over control group
 DEcomb$FC.HE.HU <- (DEcomb$Lin.FC.HE/DEcomb$Lin.FC.HU)
