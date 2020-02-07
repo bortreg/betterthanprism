@@ -12,13 +12,14 @@ HU_DE <- read.csv("~/Documents/R/Nanostring_DataFrames/DE_HU.csv")
 HEU_DE <- read.csv("~/Documents/R/Nanostring_DataFrames/DE_HEU.csv")
 
 #Plot heatmaps
+df <- HEU_DE
 tiff("~/Desktop/test.tiff", units = "in", width=5, height=5, res = 300)
-ggplot(HU_DE, aes(x=Log2.fold.change, y=-log2(P.value), color = FDR)) +
+ggplot(df, aes(x=Log2.fold.change, y=-log2(P.value), color = FDR)) +
   geom_point(size = 1.5) +
   scale_color_manual(values = c("#45A242","#5CA25A","#89BE88","#C6E0C5","#CECFCE")) +
   theme_bw() +
   geom_text_repel(
-    data = HU_DE[1:50,],
+    data = df[1:50,],
     aes(label = Gene),
     color = "black",
     size = 2,
