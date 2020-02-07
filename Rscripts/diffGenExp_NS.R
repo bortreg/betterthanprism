@@ -31,14 +31,17 @@ ggplot(df, aes(x=Log2.fold.change, y=-log2(P.value), color = FDR)) +
   geom_hline(yintercept = -log2(0.00129), linetype="dotted", color = "darkgray", size=0.5) +
   geom_hline(yintercept = -log2(0.00294), linetype="dashed", color = "darkgray", size=0.5) +
   geom_hline(yintercept = -log2(0.0251), linetype="dotdash", color = "darkgray", size=0.5)
-
-
-
-
 dev.off()
 
 #Merge dataframes
+names(HU_DE[,2:ncol(HU_DE)]) <- paste0("HU.", names(HU_DE[,2:ncol(HU_DE)]))
+names(HEU_DE[,2:ncol(HEU_DE)]) <- paste0("HEU.", names(HEU_DE[,2:ncol(HEU_DE)]))
+
 DEcomb <- merge(HU_DE, HEU_DE)
+
+#Heatmap of DE
+
+
 
 #Calculate z scores from ratios of fold change from experimental group over control group
 DEcomb$FC.HE.HU <- (DEcomb$Lin.FC.HE/DEcomb$Lin.FC.HU)
