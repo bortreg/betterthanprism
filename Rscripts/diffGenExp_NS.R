@@ -11,11 +11,6 @@ library(RColorBrewer)
 HU_DE <- read.csv("~/Documents/R/Nanostring_DataFrames/DE_HU.csv")
 HEU_DE <- read.csv("~/Documents/R/Nanostring_DataFrames/DE_HEU.csv")
 
-#make basic volcano plots with ggplot2
-vDE <- HU_DE[,c("Log2.fold.change","P.value","significant")]
-vDElab <- HU_DE[,"significant"]
-vDEcol <- HU_DE[,"greenpoints"]
-
 ggplot(HU_DE, aes(x=Log2.fold.change, y=-log2(P.value), color = FDR)) +
   geom_point() +
   scale_color_manual(values = c("#45A242","#5CA25A","#89BE88","#C6E0C5","#CECFCE"))
