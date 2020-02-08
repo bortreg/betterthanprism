@@ -5,13 +5,14 @@ library(ggrepel)
 library(scales)
 library(calibrate)
 library(RColorBrewer)
+library(gplots)
 
 #Import Tables of Differentially Expressed Genes from nSolver
 #*Make sure to rename columns you wish to remain unique to a specific group
 HU_DE <- read.csv("~/Documents/R/Nanostring_DataFrames/DE_HU.csv")
 HEU_DE <- read.csv("~/Documents/R/Nanostring_DataFrames/DE_HEU.csv")
 
-#Plot heatmaps
+#Plot volcanoes
 df <- HEU_DE
 tiff("~/Desktop/test.tiff", units = "in", width=5, height=5, res = 300)
 ggplot(df, aes(x=Log2.fold.change, y=-log2(P.value), color = FDR)) +
@@ -41,7 +42,7 @@ names(HEU_DE) <- gsub("HEU.Gene","Gene",names(HEU_DE))
 
 DEcomb <- merge(HU_DE, HEU_DE)
 DEcomb <- DEcomb[order(DEcomb$HU.Log2.fold.change, decreasing = TRUE), ]
-DEtop50 <- DEcomb[1:50, c("HU.Log2.fold.change", "HEU.Log2.fold.change")] 
+DEtop50 <- DEcomb[1:50, c("HU.Linear.fold.change","HEU.Linear.fold.change")] 
 row.names(DEtop50) <- DEcomb[1:50,"Gene"]
 DEtop50 <- t(DEtop50)  
 
@@ -50,7 +51,8 @@ DEtop50 <- t(DEtop50)
 
 
 #Heatmap of DEtop100
-my_palette<- colorRampPalette(c("#45A242","#5CA25A","#89BE88","#C6E0C5","#CECFCE"))(n = 299)
+my_palette<- colorRampPalette(c("#E2ECE1","#C6E0C5","#89BE88","#5CA25A","#45A242"))(n = 299)
+DEtop50 <- log2(DEtop50)
 tiff("~/Desktop/test.tiff", units = "in", width=4, height=10, res = 300)
 heatmap <- heatmap.2(t(DEtop50[,1:50]), 
                      col=my_palette, 
