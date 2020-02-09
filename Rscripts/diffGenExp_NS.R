@@ -3,7 +3,6 @@ library(dplyr)
 library(ggplot2)
 library(ggrepel)
 library(scales)
-library(calibrate)
 library(RColorBrewer)
 library(gplots)
 
@@ -13,7 +12,7 @@ HU_DE <- read.csv("~/Documents/R/Nanostring_DataFrames/DE_HU.csv")
 HEU_DE <- read.csv("~/Documents/R/Nanostring_DataFrames/DE_HEU.csv")
 
 #Plot volcanoes
-df <- HEU_DE
+df <- HU_DE
 pdf("~/Desktop/test.pdf", width=5, height=5)
 ggplot(df, aes(x=Log2.fold.change, y=-log2(P.value), color = FDR)) +
   geom_point(size = 1.5) +
@@ -53,20 +52,20 @@ DEtop50 <- t(DEtop50)
 #Heatmap of DEtop100
 DEtop50 <- log2(DEtop50)
 my_palette<- colorRampPalette(c("#E2ECE1","#C6E0C5","#89BE88","#5CA25A","#45A242"))(n = 40.0)
-pdf("~/Desktop/test.pdf", width=4, height=10)
+pdf("~/Desktop/test.pdf", width=3, height = 8)
 heatmap <- heatmap.2(t(DEtop50[,1:50]), 
                      col=my_palette, 
                      Rowv = FALSE, 
                      dendrogram = "none",
                      trace = "none",
                      labCol = FALSE,
-                     margins = c(1,10),
+                     margins = c(5,5),
+                     density.info = "none",
                      Colv = FALSE,
                      offsetRow = 0.01,
                      key.par = list(cex=0.8),
                      key.title = NA,
                      key.xlab = "log2 Fold Change",
-                     key.ylab = "count",
                      ColSideColors = c("#838284", "#9554BE"))
 
 par(lend = 1)
