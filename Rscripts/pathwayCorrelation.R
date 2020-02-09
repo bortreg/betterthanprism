@@ -5,8 +5,8 @@ library(tibble)
 library(gplots)
 
 #Import Pathway Correlation Matrix
-HUpaths <- read.csv("~/Desktop/HUpath.csv")
-HEUpaths <- read.csv("~/Desktop/HEUpath.csv")
+HUpaths <- read.csv("~/Documents/R/Nanostring_DataFrames/HUpath.csv")
+HEUpaths <- read.csv("~/Documents/R/Nanostring_DataFrames/HUpath.csv")
 names(HUpaths) <- paste0("HU.", names(HUpaths))
 names(HEUpaths) <- paste0("HEU.", names(HUpaths))
 HUpathName <- HUpaths[,-1]
@@ -19,12 +19,14 @@ HUcormat <- signif(cor(HUpathName),2)
 HEUcormat <- signif(cor(HEUpathName),2)
 
 #Plot Correlation Matrix
-my_palette<- colorRampPalette(c("#FFFFFF", "#45A242"))(n = 299)
+my_palette<- colorRampPalette(c("#FFFFFF", "#45A242"))(n = 40)
 heatmap(HUcormat, col=my_palette, symm=TRUE)
 heatmap(HEUcormat, col=my_palette, symm=TRUE)
 
+##Heatmap of Normalized Reads##
+
 #Load Normalized mRNA data
-HUnorm <- read.csv("~/Desktop/HUnorm.csv")
+HUnorm <- read.csv("~/Documents/R/Nanostring_DataFrames/HUnorm.csv")
 HUnorm <- as_tibble(HUnorm)
 
 #Prepare data for heatmap
@@ -47,7 +49,7 @@ HUnormNFKB$cc <- ifelse(HUnormNFKB$condition == "BCG", "#ECC03F", "#C6C4BF")
 
 
 #plot heatmap
-pdf("~/Desktop/test.tiff", width=7, height=7)
+pdf("~/Desktop/test.pdf", width=5, height=5)
 heatmap <- heatmap.2(t(HUnormNFKB[,1:18]), 
            col=my_palette, 
            Rowv = FALSE, 
@@ -56,10 +58,11 @@ heatmap <- heatmap.2(t(HUnormNFKB[,1:18]),
            labCol = FALSE,
            margins = c(5,12),
            offsetRow = 0.01,
+           keysize = 1.6,
+           density.info = "none",
            key.par = list(cex=0.8),
            key.title = NA,
            key.xlab = "z-score",
-           key.ylab = "count",
            ColSideColors = HUnormNFKB$cc)
 
 par(lend = 1)
