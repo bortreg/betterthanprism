@@ -14,7 +14,7 @@ HEU_DE <- read.csv("~/Documents/R/Nanostring_DataFrames/DE_HEU.csv")
 
 #Plot volcanoes
 df <- HEU_DE
-tiff("~/Desktop/test.tiff", units = "in", width=5, height=5, res = 300)
+pdf("~/Desktop/test.pdf", width=5, height=5)
 ggplot(df, aes(x=Log2.fold.change, y=-log2(P.value), color = FDR)) +
   geom_point(size = 1.5) +
   scale_color_manual(values = c("#45A242","#5CA25A","#89BE88","#C6E0C5","#CECFCE")) +
@@ -51,9 +51,9 @@ DEtop50 <- t(DEtop50)
 
 
 #Heatmap of DEtop100
-my_palette<- colorRampPalette(c("#E2ECE1","#C6E0C5","#89BE88","#5CA25A","#45A242"))(n = 299)
 DEtop50 <- log2(DEtop50)
-tiff("~/Desktop/test.tiff", units = "in", width=4, height=10, res = 300)
+my_palette<- colorRampPalette(c("#E2ECE1","#C6E0C5","#89BE88","#5CA25A","#45A242"))(n = 40.0)
+pdf("~/Desktop/test.pdf", width=4, height=10)
 heatmap <- heatmap.2(t(DEtop50[,1:50]), 
                      col=my_palette, 
                      Rowv = FALSE, 
