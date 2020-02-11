@@ -10,7 +10,7 @@ row.names(Pathtop50) <- pathScores[1:50,"Pathway"]
 Pathtop50 <- t(Pathtop50)  
 
 
-#Heatmap of DEtop100
+#Heatmap of path score top 50
 my_palette<- colorRampPalette(c("#E2ECE1","#C6E0C5","#89BE88","#5CA25A","#45A242"))(n = 40.0)
 pdf("~/Desktop/test.pdf", width=7, height = 10)
 heatmap <- heatmap.2(t(Pathtop50[,1:50]), 
