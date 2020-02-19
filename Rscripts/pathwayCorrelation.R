@@ -44,37 +44,16 @@ mat_data <- log2(mat_data)
 mat_data <- zscore(mat_data)
 mat_data <- cbind(mat_data, HUnorm[,3])
 
-#Index Genes Based on different gene subsets
-mycoBgenes <- c("TNF","IL1B","IL6","IL12A","IL12B","IL18","IL15","IFNG","IL4","IL10","IL1RAP","TGFB1","IL8","CCL2","CCL5","NFKB1","NFKB2","IL23A","BAX","SLAMF1","MCL1","SOCS3","condition")
-HUnormMycoB <- mat_data[,mycoBgenes]
-HUnormMycoB$cc <- ifelse(HUnormMycoB$condition == "BCG", "#ECC03F", "#2E2EFE")
-
-transFacGenes <- c()
-HUnormTransFac <- mat_data[,transFacGenes]
-HUnormTransFac$cc <- ifelse(HUnormTransFac$condition == "BCG", "#ECC03F", "#2E2EFE")
-
-apopGenes <- c()
-HUnormApop <- mat_data[,apopGenes]
-HUnormApop$cc <- ifelse(HUnormApop$condition == "BCG", "#ECC03F", "#2E2EFE")
-
-jakStatGenes <- c()
-HUnormJakStat <- mat_data[,jakStatGenes]
-HUnormJakStat$cc <- ifelse(HUnormJakStat$condition == "BCG", "#ECC03F", "#2E2EFE")
-
-cellProlifGenes <- c()
-HUnormCellProlif <- mat_data[,cellProlifGenes]
-HUnormCellProlif$cc <- ifelse(HUnormCellProlif$condition == "BCG", "#ECC03F", "#2E2EFE")
-
-nkbCasGenes <- c()
-HUnormNkbCas <- mat_data[,nkbCasGenes]
-HUnormNkbCas$cc <- ifelse(HUnormNkbCas$condition == "BCG", "#ECC03F", "#2E2EFE")
-
+#Index Genes
+NFkBgenes <- c("TNF","IL1B","IL6","IL12A","IL12B","IL18","IL15","IFNG","IL4","IL10","IL1RAP","TGFB1","IL8","CCL2","CCL5","NFKB1","NFKB2","IL23A","BAX","SLAMF1","MCL1","SOCS3","condition")
+HUnormNFKB <- mat_data[,NFkBgenes]
+HUnormNFKB$cc <- ifelse(HUnormNFKB$condition == "BCG", "#ECC03F", "#2E2EFE")
 
 
 
 #plot heatmap
 pdf("~/Desktop/test2.pdf", width=5, height=5)
-heatmap <- heatmap.2(t(HUnormMycoB[,1:22]), 
+heatmap <- heatmap.2(t(HUnormNFKB[,1:22]), 
            col=my_palette, 
            Rowv = FALSE, 
            dendrogram = "col",
@@ -87,7 +66,7 @@ heatmap <- heatmap.2(t(HUnormMycoB[,1:22]),
            key.par = list(cex=0.8),
            key.title = NA,
            key.xlab = "z-score",
-           ColSideColors = HUnormMycoB$cc)
+           ColSideColors = HUnormNFKB$cc)
 
 par(lend = 1)
 legend("topright",
@@ -100,30 +79,3 @@ legend("topright",
 )          
 dev.off()
 
-#plot heat map of all genes
-pdf("~/Desktop/test2.pdf", width=5, height=5)
-heatmap <- heatmap.2(t(mat_data[,1:579]), 
-                     col=my_palette, 
-                     Rowv = FALSE, 
-                     dendrogram = "col",
-                     trace = "none",
-                     labCol = FALSE,
-                     margins = c(5,12),
-                     offsetRow = 0.01,
-                     keysize = 1.6,
-                     density.info = "none",
-                     key.par = list(cex=0.8),
-                     key.title = NA,
-                     key.xlab = "z-score",
-                     ColSideColors = HUnormNFKB$cc)
-
-par(lend = 1)
-legend("topright",
-       legend = c("untreated","BCG"),
-       cex = 0.7,
-       pt.cex = 1,
-       col = c("#2E2EFE","#ECC03F"),
-       lty = 1,
-       lwd = 10
-)          
-dev.off()
