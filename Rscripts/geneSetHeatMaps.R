@@ -8,7 +8,7 @@ library(gplots)
 my_palette<- colorRampPalette(c("black","gray","red"))(n = 40)
 
 #Load Normalized mRNA data
-HUnorm <- read.csv("~/Documents/R/Nanostring_DataFrames/HUnorm.csv")
+HUnorm <- read.csv("~/Documents/R/Nanostring_DataFrames/HEUnorm.csv")
 HUnorm <- as_tibble(HUnorm)
 
 #Prepare data for heatmap
@@ -32,24 +32,24 @@ inflammGenes <- c(as.character(geneSets$inflammatory.response[1:35]), "condition
 HUnormInflamm <- mat_data[,inflammGenes]
 HUnormInflamm$cc <- ifelse(HUnormInflamm$condition == "BCG", "#ECC03F", "#2E2EFE")
 
-apopGenes <- c()
+apopGenes <- c(as.character(geneSets$programmed.cell.death[1:49]), "condition")
 HUnormApop <- mat_data[,apopGenes]
 HUnormApop$cc <- ifelse(HUnormApop$condition == "BCG", "#ECC03F", "#2E2EFE")
 
-jakStatGenes <- c()
+jakStatGenes <- c(as.character(geneSets$jak.stat.cascade[1:15]), "condition")
 HUnormJakStat <- mat_data[,jakStatGenes]
 HUnormJakStat$cc <- ifelse(HUnormJakStat$condition == "BCG", "#ECC03F", "#2E2EFE")
 
-cellProlifGenes <- c()
+cellProlifGenes <- c(as.character(geneSets$cell.proliferation[1:19]), "condition")
 HUnormCellProlif <- mat_data[,cellProlifGenes]
 HUnormCellProlif$cc <- ifelse(HUnormCellProlif$condition == "BCG", "#ECC03F", "#2E2EFE")
 
-nkbCasGenes <- c()
+nkbCasGenes <- c(as.character(geneSets$Ikk.nfkb.cascade[1:20]), "condition")
 HUnormNkbCas <- mat_data[,nkbCasGenes]
 HUnormNkbCas$cc <- ifelse(HUnormNkbCas$condition == "BCG", "#ECC03F", "#2E2EFE")
 
 #plot heatmap
-hm_df <- HUnormInflamm
+hm_df <- HUnormNkbCas
 pdf("~/Desktop/test2.pdf", width=5, height=((length(hm_df)-2)*0.285))
 heatmap <- heatmap.2(t(hm_df[,1:(length(hm_df)-2)]), 
                      col=my_palette, 
@@ -64,7 +64,7 @@ heatmap <- heatmap.2(t(hm_df[,1:(length(hm_df)-2)]),
                      key.par = list(cex=0.8),
                      key.title = NA,
                      key.xlab = "z-score",
-                     ColSideColors = HUnormMycoB$cc)
+                     ColSideColors = HUnormInflamm$cc)
 
 par(lend = 1)
 legend("topright",
@@ -76,3 +76,4 @@ legend("topright",
        lwd = 10
 )          
 dev.off()
+  
