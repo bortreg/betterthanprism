@@ -1,6 +1,7 @@
 library(dplyr)
 library(RColorBrewer)
 library(gplots)
+library(ggplot2)
 
 ##Produce Heat Maps for Each Gene Set in 2 Groups
 
@@ -8,10 +9,12 @@ library(gplots)
 my_palette<- colorRampPalette(c("black","gray","red"))(n = 40)
 
 #Load Normalized mRNA data
-HUnorm <- read.csv("~/Documents/R/Nanostring_DataFrames/HEUnorm.csv")
+HUnorm <- read.csv("~/Documents/R/Nanostring_DataFrames/HUnorm.csv")
 HUnorm <- as_tibble(HUnorm)
+HEUnorm <- read.csv("~/Documents/R/Nanostring_DataFrames/HEUnorm.csv")
+HEUnorm <- as_tibble(HEUnorm)
 
-#Prepare data for heatmap
+#Prepare data for heatmap, otherwise skip to barplots 
 zscore <- function(x) {          #zscore function
   z <- (mat_data - mean(x)) / sd(x)
   return(z)
@@ -58,6 +61,27 @@ legend("topright",
        lwd = 10
 )             
 dev.off()
+
+#Use barplots to compare norm mRNA counts for individual genes
+HUrnames <- as.matrix(HUnorm[,1])
+HUcounts <- data.matrix(HUnorm[,4:ncol(HUnorm)])
+rownames(HUcounts) <- HUrnames
+HUcounts <- cbind(HUcounts, HUnorm[,3])
+HUcounts <- HUcounts[order(HUcounts$condition, decreasing = FALSE),]
+ggplot(HUcounts, aes(HUcounts$condition, HUcounts$CD40)) +
+geom_bar(stat = "identity") +
+labs(title = NULL, x = "Condition", y = "Normalized mRNA counts")
+
+HEUrnames <- as.matrix(HEUnorm[,1])
+HEUcounts <- data.matrix(HEUnorm[,4:ncol(HEUnorm)])
+rownames(HEUcounts) <- HEUrnames
+HEUcounts <- cbind(HEUcounts, HEUnorm[,3])
+HEUcounts <- HEUcounts[order(HEUcounts$condition, decreasing = FALSE),]
+ggplot(HEUcounts, aes(HEUcounts$condition, HEUcounts$CD40)) +
+  geom_bar(stat = "identity") +
+  labs(title = NULL, x = "Condition", y = "Normalized mRNA counts")
+
+
 
 #Define Gene Sets
 inflammGenes <- c(as.character(geneSets$inflammatory.response[1:35]), "condition")
