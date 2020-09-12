@@ -3,7 +3,7 @@ library(ggplot2)
 library(dplyr)
 
 #Open Data from Exported from FlowJo and format for analysis
-tfh <- read.csv("~/Desktop/20191015_TfhPanel_comb_v03.csv")
+tfh <- read.csv("~/Documents/RawData/OVS/20191015_TfhPanel_comb_v03.csv")
 tfh$macaque.ID <- as.factor(tfh$macaque.ID)
 
 #This is a way to "find and replace" with dplyr! Better than xcel :-)
@@ -18,8 +18,10 @@ cd4pd1X3 <- tfh[tfh$population == "Cells/Singlets/Live/Tcells/CD4+,CD8-/PD-1low/
 cd4pd1Dpos <- tfh[tfh$population == "Cells/Singlets/Live/Tcells/CD4+,CD8-/PD-1low/CXCR3+,CXCR5+", ]
 cd4pd1X5_I <- tfh[tfh$population == "Cells/Singlets/Live/Tcells/CD4+,CD8-/PD-1low/CXCR3-,CXCR5+/ICOS+", ]
 cd4pd1X5_M <- tfh[tfh$population == "Cells/Singlets/Live/Tcells/CD4+,CD8-/PD-1low/CXCR3-,CXCR5+/Maf+", ]
+cd4pd1low <- tfh[tfh$population == "Cells/Singlets/Live/Tcells/CD4+,CD8-/PD-1low", ]
+cd4all <- tfh[tfh$population == "Cells/Singlets/Live/Tcells/CD4+,CD8-", ]
 
-#Sort data by macaque ID for paired comparisons
+ #Sort data by macaque ID for paired comparisons
 cd8Cxcr5 <- cd8Cxcr5[order(cd8Cxcr5$macaque.ID), ]
 cd4pd1Dneg <- cd4pd1Dneg[order(cd4pd1Dneg$macaque.ID), ]
 cd4pd1X5 <- cd4pd1X5[order(cd4pd1X5$macaque.ID), ]
@@ -27,22 +29,24 @@ cd4pd1X3 <- cd4pd1X3[order(cd4pd1X3$macaque.ID), ]
 cd4pd1Dpos <- cd4pd1Dpos[order(cd4pd1Dpos$macaque.ID), ]
 cd4pd1X5_M <- cd4pd1X5_M[order(cd4pd1X5_M$macaque.ID), ]
 cd4pd1X5_I <- cd4pd1X5_I[order(cd4pd1X5_I$macaque.ID), ]
+cd4pd1low <- cd4pd1low[order(cd4pd1low$macaque.ID), ]
+cd4all <- cd4all[order(cd4all$macaque.ID), ]
 
 #determine averages for for populations of interest by group
 PoI <- cd4pd1X5_I
 PoI_IM <- PoI[PoI$vaccine.route == "IM", ]
 PoI_IEP <- PoI[PoI$vaccine.route == "Oral", ]
 
+#calculate percent circulating tfh of total CD4 T cells
+cd4all$statTFH <- ((cd4pd1Dpos$cell.num + cd4pd1X5$cell.num)/cd4all$cell.num)*100
 
 #plot data for each population at a given timepoint
-p <- ggplot(PoI, aes(group = study.wk, x = study.wk, y = statistic)) +
-  geom_boxplot(size = 0.4, width = 0.4, fill = "lightgray") + theme_classic() 
-wkP <- p + geom_jitter(width = 0.08, aes(shape = vaccine.route, color = macaque.ID))
-wkPl <- wkP + geom_vline(xintercept = 0, linetype="solid", color = "black", size=0.3)+ 
-  geom_vline(xintercept=8, linetype="dashed", color = "black", size = 0.3)+
-  geom_vline(xintercept=16, linetype="dashed", color = "black", size = 0.3)
-
-wkPl
+p <- ggplot(PoI, aes(x = study.wk, y = statistic, color = macaque.ID))
+p + geom_line(size = 0.4) + 
+  theme_bw() +
+  stat_smooth(aes(group = vaccine.route)) +
+  stat_summary(aes(group = vaccine.route), geom = "point", fun = mean, shape = 16, size = 1) +
+  facet_grid(. ~vaccine.route)
 
 #Add plot labels
 wkPlab <- wkPl + labs(title = "Circulating Tfh",subtitle = "PBMC", color = "macaque",
@@ -54,7 +58,7 @@ wkPlab
 col1 <- cd4pd1X5_I[cd4pd1X5_I$study.wk == -2, ]
 col1oral <- col1[col1$vaccine.route == "Oral", ]
 col1im <- col1[col1$vaccine.route == "IM", ]
-col2 <- cd4pd1X5_I[cd4pd1X5_I$study.wk == 2, ]
+col2 <- cd4pd1X5_I[cd4pd1X5_I$study.wk == 16.43, ]
 col2oral <- col2[col2$vaccine.route == "Oral", ]
 col2im <- col2[col2$vaccine.route == "IM", ]
 
