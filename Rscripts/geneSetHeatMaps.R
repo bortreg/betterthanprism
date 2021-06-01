@@ -6,11 +6,11 @@ library(ggplot2)
 ##Produce Heat Maps for Each Gene Set in 2 Groups
 
 #set color palette
-my_palette<- colorRampPalette(c("black","gray","red"))(n = 40)
+my_palette<- colorRampPalette(c("white","gray","#57C84D"))(n = 40)
 
 #Load Normalized mRNA data
-HUnorm <- read.csv("~/Documents/R/Nanostring_DataFrames/HUnorm.csv")
-HUnorm <- as_tibble(HUnorm)
+HInorm <- read.csv("~/Documents/R/Nanostring_DataFrames/HInorm.csv")
+HInorm <- as_tibble(HInorm)
 HEUnorm <- read.csv("~/Documents/R/Nanostring_DataFrames/HEUnorm.csv")
 HEUnorm <- as_tibble(HEUnorm)
 
@@ -19,22 +19,22 @@ zscore <- function(x) {          #zscore function
   z <- (mat_data - mean(x)) / sd(x)
   return(z)
 }
-rnames <- as.matrix(HUnorm[,1])
-mat_data <- data.matrix(HUnorm[,4:ncol(HUnorm)])
+rnames <- as.matrix(HInorm[,1])
+mat_data <- data.matrix(HInorm[,4:ncol(HInorm)])
 rownames(mat_data) <- rnames
 mat_data <- log2(mat_data)
 mat_data <- zscore(mat_data)
-mat_data <- cbind(mat_data, HUnorm[,3])
+mat_data <- cbind(mat_data, HInorm[,3])
 
 #Load Condensed Gene Set List
-geneSets <- read.csv("~/Documents/R/Nanostring_DataFrames/GeneModuleCond.csv")
+geneSets <- read.csv("~/Documents/R/Nanostring_DataFrames/GeneModuleCond2.csv")
 geneSets <- as_tibble(geneSets)
-condGenes <- c(as.character(geneSets$condensed[1:137]), "condition")
-HUnormCond <- mat_data[,condGenes]
-HUnormCond$cc <- ifelse(HUnormCond$condition == "BCG", "#ECC03F", "#2E2EFE")
+condGenes <- c(as.character(geneSets$condensed), "condition")
+HInormCond <- mat_data
+HInormCond$cc <- ifelse(HInormCond$condition == "SARS2uv", "#ECC03F", "#2E2EFE")
 
 #plot heatmap
-hm_df <- HUnormCond
+hm_df <- HInormCond[,1:50]
 pdf("~/Desktop/test3.pdf", width=8, height=((length(hm_df)-2)*0.18))
 heatmap <- heatmap.2(t(hm_df[,1:(length(hm_df)-2)]), 
                      col=my_palette, 
@@ -49,11 +49,11 @@ heatmap <- heatmap.2(t(hm_df[,1:(length(hm_df)-2)]),
                      key.par = list(cex=0.8),
                      key.title = NA,
                      key.xlab = "z-score",
-                     ColSideColors = HUnormCond$cc,
+                     ColSideColors = HInormCond$cc,
                      lhei = c(1,10))
 par(lend = 1)
 legend("topright",
-       legend = c("untreated","BCG"),
+       legend = c("untreated","SARS2uv"),
        cex = 0.7,
        pt.cex = 1,
        col = c("#2E2EFE","#ECC03F"),
