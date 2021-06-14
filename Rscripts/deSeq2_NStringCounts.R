@@ -6,7 +6,6 @@ library(data.table)
 
 
 #Import and transpose data
-
 dfA <- read.csv("~/Documents/R/Nanostring_DataFrames/HInormDESeq.csv")
 dfB <- read.csv("~/Documents/R/Nanostring_DataFrames/LOnormDESeq.csv")
 row.names(dfA) <- dfA$sample.ID
@@ -19,6 +18,8 @@ rownames(dfA_trans) <- colnames(dfA)
 colnames(dfA_trans) <- rownames(dfA)
 rownames(dfB_trans) <- colnames(dfB)
 colnames(dfB_trans) <- rownames(dfB)
+dfA <- dfA_trans
+dfB <- dfB_trans
 
 #Run example to test DESeq using matirx of data with existing counts
 library(pasilla)
