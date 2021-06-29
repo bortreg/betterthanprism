@@ -1,11 +1,11 @@
 ## Import Normalized mRNA counts from a Nanostring experiment for analysis in Bioconductor DESeq2 package
- # This analysis is desingned to compare Fold Changes across 2 different groups 
+ # This analysis is designed to compare Fold Changes across 2 different groups 
  # (eg. Group A and B both receive treatment X, compare responses to X in A vs B)
  # Followed Description at https://support.bioconductor.org/p/69705/
- # Tutorial for DESeq2 can be find 
+ # Tutorial for DESeq2 can be found at http://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html
 
 library(data.table)
-
+library(ggplot2)
 
 #Import and transpose data
 dfA <- read.csv("~/Documents/R/Nanostring_DataFrames/HInormDESeq.csv")
@@ -32,9 +32,14 @@ colData <- data.frame(
   "condition" = rep(c("untreated", "treated"), times=(ncol(countData)/2))
 )
 
+#check if colData matches countData
+all(rownames(colData) %in% colnames(countData))
+all(rownames(colData) == colnames(countData))
+ncol(countData) == nrow(colData)
+
 #Initial DE setup in DESeq2
 library("DESeq2")
-dds <- DESeqDataSetFromMatrix(countData = round(dfA),
+dds <- DESeqDataSetFromMatrix(countData = round(countData),
                               colData = colData,
                               design = ~ condition)
 
@@ -42,13 +47,22 @@ keep <- rowSums(counts(dds)) >= 10 #Prefilter reads
 dds <- dds[keep,]
 
 dds$condition <- factor(dds$condition, levels = c("untreated","treated")) #Set factor levels
+dds$position <- factor(dds$position, levels = c("A","B")) 
 
 #Run Differential Expression Analysis
 dds <- DESeq(dds)
-res <- results(dds)
+res <- results(dds, name = "condition_treated_vs_untreated")
+res <- results(dds, contrast = c("condition","treated","untreated"))
 res
 
 write.csv(res, "Desktop/res.csv")
+
+#change shrinkage for visualization and ranking
+resLFC <- lfcShrink(dds, coef="condition_treated_vs_untreated", type="apeglm")
+
+#reorder results by p-values and adjusted p-values
+resOrdered <- res[order(res$pvalue),] #reorder by p value
+sum(res$padj <0.1, na.rm = TRUE) #
 
 #Plot Data
 vplot <- res[order(res$padj, decreasing = FALSE),]
