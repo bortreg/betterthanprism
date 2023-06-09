@@ -1,6 +1,3 @@
 # betterthanprism
-Here is a bit about myself
-  I like to drink red tea and eat plain salads. 
-  Sometimes I work at coffee places. 
-  I am trying to make nicer graphs with fewer mistakes.
+I am an immunologist that likes to make graphs for fast data visualization and exploration. 
 
